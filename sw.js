@@ -1,5 +1,5 @@
 // Offline cache: app shell is cached on install; Google Fonts are cached the first time they load.
-const CACHE = 'poh-v18';
+const CACHE = 'poh-v20';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './privacy.html', './icons/icon-192.png', './icons/icon-512.png', './icons/maskable-192.png', './icons/maskable-512.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL.map(u => new Request(u, { cache: 'reload' })))).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
@@ -7,7 +7,13 @@ self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
   // pages: network first so updates reach installed users; fall back to the cached copy offline
   if (e.request.mode === 'navigate') {
-    e.respondWith(fetch(e.request).then(res => { if (res && res.ok) { const copy = res.clone(); caches.open(CACHE).then(c => c.put('./index.html', copy)); } return res; }).catch(() => caches.match('./index.html')));
+    // only the app page itself is stored as the offline copy (opening privacy.html must not replace it)
+    const url = new URL(e.request.url);
+    const isShell = url.origin === location.origin && /\/(index\.html)?$/.test(url.pathname);
+    e.respondWith(fetch(e.request).then(res => {
+      if (isShell && res && res.ok) { const copy = res.clone(); caches.open(CACHE).then(c => c.put('./index.html', copy)); }
+      return res;
+    }).catch(() => caches.match(isShell ? './index.html' : e.request).then(r => r || caches.match('./index.html'))));
     return;
   }
   e.respondWith(caches.match(e.request).then(hit => hit || fetch(e.request).then(res => {

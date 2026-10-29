@@ -21,7 +21,7 @@
   --accent:#0f6e74; --accent-ink:#ffffff; --accent-soft:#d8ecec;
   --tag:#e6ecea; --tag-ink:#2f4750;
   --ok:#2e7d4f; --ok-soft:#e1f1e7; --warn:#a76300; --warn-soft:#fbefd9; --bad:#b23a2e; --bad-soft:#f8e1de; --info:#2f5f8a; --info-soft:#e2ecf6;
-  --qld:#6b3fa0; --qld-soft:#efe7f8;
+  --nb:#6b3fa0; --nb-soft:#efe7f8;
   --water:#dcecf5; --sludge:#cdb48a; --eq:#e9eeee;
   --f-display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
   --f-body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -33,13 +33,13 @@
   --accent:#4fb8be; --accent-ink:#06191b; --accent-soft:#16373a;
   --tag:#203034; --tag-ink:#b9cdd0;
   --ok:#6cc58e; --ok-soft:#173327; --warn:#e3a646; --warn-soft:#3a2b12; --bad:#ec7f73; --bad-soft:#3d1c18; --info:#7fb2e0; --info-soft:#18293a;
-  --qld:#b996e6; --qld-soft:#2a1f3a; --water:#16303d; --sludge:#6a5434; --eq:#223236; color-scheme:dark}}
+  --nb:#b996e6; --nb-soft:#2a1f3a; --water:#16303d; --sludge:#6a5434; --eq:#223236; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0f1719; --panel:#172226; --ink:#e3ecec; --muted:#93a6ab; --line:#2a3a3f;
   --accent:#4fb8be; --accent-ink:#06191b; --accent-soft:#16373a;
   --tag:#203034; --tag-ink:#b9cdd0;
   --ok:#6cc58e; --ok-soft:#173327; --warn:#e3a646; --warn-soft:#3a2b12; --bad:#ec7f73; --bad-soft:#3d1c18; --info:#7fb2e0; --info-soft:#18293a;
-  --qld:#b996e6; --qld-soft:#2a1f3a; --water:#16303d; --sludge:#6a5434; --eq:#223236; color-scheme:dark}
+  --nb:#b996e6; --nb-soft:#2a1f3a; --water:#16303d; --sludge:#6a5434; --eq:#223236; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--panel)}
@@ -70,8 +70,8 @@ h3{font-family:var(--f-display);font-weight:600;font-size:21px;margin:0;letter-s
 .lede{color:var(--muted);margin:0 0 18px;max-width:70ch}
 .tag{display:inline-block;font-family:var(--f-mono);font-size:12px;background:var(--tag);color:var(--tag-ink);padding:1px 6px;border-radius:4px;white-space:nowrap;margin:1px 2px 1px 0}
 .tag.xls{background:transparent;border:1px dashed var(--muted);color:var(--muted)}
-.qld{display:flex;gap:8px;align-items:flex-start;background:var(--qld-soft);color:var(--ink);border-left:3px solid var(--qld);padding:8px 10px;border-radius:0 6px 6px 0;font-size:14px}
-.qld b{color:var(--qld);font-family:var(--f-display);letter-spacing:.06em;font-size:13px;text-transform:uppercase;white-space:nowrap;padding-top:1px}
+.nbox{display:flex;gap:8px;align-items:flex-start;background:var(--nb-soft);color:var(--ink);border-left:3px solid var(--nb);padding:8px 10px;border-radius:0 6px 6px 0;font-size:14px}
+.nbox b{color:var(--nb);font-family:var(--f-display);letter-spacing:.06em;font-size:13px;text-transform:uppercase;white-space:nowrap;padding-top:1px}
 .note{font-size:14px;color:var(--muted)}
 .apnote{font-size:13px;color:var(--muted);font-style:italic}
 /* Calculators */
@@ -232,7 +232,7 @@ td:first-child{width:46%}
 .tag{white-space:normal}
 tr:last-child td{border-bottom:0}
 .rcard .foot{padding:10px 16px;display:flex;flex-direction:column;gap:6px;margin-top:auto;border-top:1px solid var(--line)}
-.flagq{color:var(--qld);font-weight:700;cursor:help}
+.flagq{color:var(--nb);font-weight:700;cursor:help}
 /* Search */
 .sres{display:flex;flex-direction:column;gap:8px}
 .hit{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:10px 14px;display:flex;flex-direction:column;gap:2px;cursor:pointer;text-align:left;font:inherit;color:inherit}
@@ -501,7 +501,7 @@ td .si{font-size:12px;color:var(--muted);font-family:var(--f-mono)}
     <h2 style="margin-top:28px">Sources</h2>
     <p class="lede">Ranges and formulas are drawn from these references and from general wastewater practice.</p>
     <div class="srclist" id="srcs"></div>
-    <p class="note" style="margin-top:22px">Version 1.3.0 · Guidance only: follow your local regulator, permit and equipment supplier limits.</p>
+    <p class="note" style="margin-top:22px">Version 1.4.0 · Guidance only: follow your local regulator, permit and equipment supplier limits. · <a href="privacy.html">Privacy policy</a> · WWTP Plus · hello@wwtpplus.com</p>
   </section>
 </main>
 <div id="paywall" class="paywall" hidden></div>
@@ -515,6 +515,7 @@ let UNITS = 'SI';
 try { UNITS = localStorage.getItem('units') === 'US' ? 'US' : 'SI'; } catch (e) {}
 const U_RULES = [
   // [SI unit (prefix), US unit, factor]  (US = SI × factor)
+  ['m³ gas/d', 'ft³ gas/d', 35.3147], ['m³ air/kg', 'ft³ air/lb', 16.0185], ['m²/m³', 'ft²/ft³', 0.3048], ['kWh/ML', 'kWh/MG', 3.78541],
   ['kg BOD/kg MLVSS·d', 'lb BOD/lb MLVSS·d', 1], ['kg BOD/kg MLSS·d', 'lb BOD/lb MLSS·d', 1], ['kg/kg', 'lb/lb', 1],
   ['ML/d', 'MGD', 0.264172], ['ML', 'MG', 0.264172],
   ['m³/kg VS destroyed', 'ft³/lb VS destroyed', 16.0185],
@@ -1180,7 +1181,7 @@ const CALCS = [
       if (v.ssv > 0 && v.ssv < 1000) { const rs = v.ssv / (1000 - v.ssv); rows.push({ label: 'Settleometer RAS ratio', value: fmt(rs * 100, 0), unit: '% of Q' }, { label: 'Settleometer RAS flow', value: fmt(rs * v.q, 1), unit: 'ML/d' }); }
       if (v.qr > 0) rows.push({ label: 'Current RAS ratio', value: fmt(v.qr / v.q * 100, 0), unit: '% of Q' }, { label: 'RAS TSS expected at current rate', value: fmt(v.mlss * (v.q + v.qr) / v.qr, 0), unit: 'mg/L' });
       const st = v.xr <= v.mlss ? { level: 'bad', text: 'RAS must be thicker than MLSS. Check the samples.' }
-        : { level: 'info', text: 'Typical RAS: conventional 25–75% of Q; complete-mix 25–100%; extended aeration 50–150%; oxidation ditch 75–150%. Set the final rate by blanket depth (0.3–0.6 m).' };
+        : { level: 'info', text: 'Typical RAS: conventional 25–75% of Q; complete-mix 25–100%; extended aeration 50–150%; oxidation ditch 50–150%. Set the final rate by blanket depth (0.3–0.6 m).' };
       return { rows, status: st };
     },
     formula: ['Solids balance: R = MLSS ÷ (X_RAS − MLSS)', 'Settleometer: R = SSV₃₀ ÷ (1000 − SSV₃₀)', 'Q_RAS = R × Q', 'Expected X_RAS = MLSS × (Q + Q_RAS) ÷ Q_RAS'],
@@ -1444,7 +1445,7 @@ const CALCS = [
         { label: 'Return flow', value: fmt(v.q * v.r, 1), unit: 'ML/d' },
       ];
       if (v.xt > v.xb) rows.push({ label: 'Ratio for target MLSS', value: fmt(v.xb / (v.xt - v.xb), 1), unit: '× Q' });
-      return { rows, status: xm > 15000 ? { level: 'warn', text: 'Membrane tank above about 15 g/L: viscosity rises sharply and fouling and sludging risk increase.' } : xm < 8000 ? { level: 'info', text: 'Membrane tank MLSS below the usual 8–15 g/L.' } : { level: 'ok', text: 'Membrane tank MLSS in the usual 8–15 g/L range.' } };
+      return { rows, status: xm > 15000 ? { level: 'warn', text: 'Membrane tank above about 15 g/L: viscosity rises sharply and fouling and sludging risk increase.' } : xm < 8000 ? { level: 'info', text: 'Membrane tank MLSS below the usual 8–12 g/L.' } : { level: 'ok', text: 'Membrane tank MLSS in the usual 8–12 g/L range (cap about 15 g/L).' } };
     },
     formula: ['X_mt = X_bio × (R + 1) ÷ R', 'R needed = X_bio ÷ (X_target − X_bio)', 'Feed to membrane tank = (R + 1) × Q'],
     where: ['Ignores WAS drawn from the membrane tank (small)', 'Typical recirculation 3–5 × Q'],
@@ -1527,15 +1528,15 @@ const CALCS = [
       { id: 'vsf', label: 'VS fed', unit: 'kg/d', def: 11700 },
       { id: 'y', label: 'Gas yield', unit: 'm³/kg VS destroyed', def: 0.9, step: 0.05 },
       { id: 'ch4', label: 'Methane content', unit: '%', def: 63 },
-      { id: 'meas', label: 'Measured biogas (0 to skip)', unit: 'm³/d', def: 4000 },
+      { id: 'meas', label: 'Measured biogas (0 to skip)', unit: 'm³ gas/d', def: 4000 },
     ],
     compute: v => {
       const a = v.vin / 100, b = v.vout / 100, vsr = (a - b) / (a - a * b), dest = v.vsf * vsr, gas = dest * v.y;
       const rows = [
         { label: 'VS reduction (Van Kleeck)', value: fmt(vsr * 100, 1), unit: '%', bold: true },
         { label: 'VS destroyed', value: fmt(dest, 0), unit: 'kg/d' },
-        { label: 'Expected biogas', value: fmt(gas, 0), unit: 'm³/d', bold: true },
-        { label: 'Methane', value: fmt(gas * v.ch4 / 100, 0), unit: 'm³/d' },
+        { label: 'Expected biogas', value: fmt(gas, 0), unit: 'm³ gas/d', bold: true },
+        { label: 'Methane', value: fmt(gas * v.ch4 / 100, 0), unit: 'm³ gas/d' },
         { label: 'Energy in methane', value: fmt(gas * v.ch4 / 100 * 35.8 / 3.6, 0), unit: 'kWh/d' },
       ];
       let st = band(vsr * 100, 40, 65, 'VS reduction in the 40–65% range expected for mesophilic digestion.', 'Low VS reduction: short SRT, poor mixing, low temperature or grit build-up.', 'Unusually high: check sampling and VS analysis.');
@@ -1778,7 +1779,7 @@ const CALCS = [
     ],
     compute: v => {
       const o2 = v.q * 0.279, sotr = o2 * v.sote / 100;
-      const csT = 14.652 - 0.41022 * v.t + 0.007991 * v.t ** 2 - 0.000077774 * v.t ** 3, cs20 = 9.09;
+      const csT = 14.652 - 0.41022 * v.t + 0.007991 * v.t ** 2 - 0.000077774 * v.t ** 3, cs20 = 14.652 - 0.41022 * 20 + 0.007991 * 400 - 0.000077774 * 8000;
       const om = Math.pow(1 - 2.25577e-5 * v.z, 5.25588), cinf = cs20 * (1 + 0.4 * v.sub / 10.33);
       const drive = v.beta * (csT / cs20) * om * cinf - v.do;
       const aotr = sotr * v.alpha * v.ff * drive / cinf * Math.pow(1.024, v.t - 20), r = aotr / sotr;
@@ -2540,7 +2541,7 @@ const CALCS2 = [
     id: 'chp', name: 'Biogas energy and digester heating', group: 'Digestion',
     blurb: 'Electricity and heat from biogas, and whether the heat covers digester heating.',
     inputs: [
-      { id: 'gas', label: 'Biogas production', unit: 'm³/d', def: 4000 },
+      { id: 'gas', label: 'Biogas production', unit: 'm³ gas/d', def: 4000 },
       { id: 'ch4', label: 'Methane content', unit: '%', def: 63, hint: 'Usually 60–70%.' },
       { id: 'ee', label: 'CHP electrical efficiency', unit: '%', def: 38, hint: 'Gas engines about 35–42%; microturbines 26–30%.', presets: [['Engine 38%', 38], ['Microturbine 28%', 28]] },
       { id: 'te', label: 'CHP heat recovery efficiency', unit: '%', def: 42, hint: 'Usually 40–50% recoverable as hot water.' },
@@ -2552,7 +2553,7 @@ const CALCS2 = [
     compute: v => {
       const ch4 = v.gas * v.ch4 / 100, mj = ch4 * 35.8, kwh = mj / 3.6, el = kwh * v.ee / 100 / 24, heat = kwh * v.te / 100 / 24, sh = v.qs * 1000 * 4.19 * (v.td - v.ts) / 86400, need = sh + v.loss;
       return { rows: [
-        { label: 'Methane', value: fmt(ch4, 0), unit: 'm³/d' },
+        { label: 'Methane', value: fmt(ch4, 0), unit: 'm³ gas/d' },
         { label: 'Energy in methane (LHV)', value: fmt(kwh, 0), unit: 'kWh/d' },
         { label: 'Electrical output (average)', value: fmt(el, 0), unit: 'kW', bold: true },
         { label: '', value: fmt(el * 24, 0), unit: 'kWh/d' },
@@ -2579,9 +2580,9 @@ const CALCS2 = [
       const kg = v.q * v.cod / 1000 * (1 - v.cs / 100), stp = kg * 0.35, act = stp * (273.15 + v.t) / 273.15;
       return { rows: [
         { label: 'COD converted to methane', value: fmt(kg, 0), unit: 'kg/d' },
-        { label: 'Methane at 0 °C, 1 atm', value: fmt(stp, 0), unit: 'm³/d' },
-        { label: 'Methane at reactor temperature', value: fmt(act, 0), unit: 'm³/d', bold: true },
-        { label: 'Biogas at reactor temperature', value: fmt(act / (v.ch4 / 100), 0), unit: 'm³/d', bold: true },
+        { label: 'Methane at 0 °C, 1 atm', value: fmt(stp, 0), unit: 'm³ gas/d' },
+        { label: 'Methane at reactor temperature', value: fmt(act, 0), unit: 'm³ gas/d', bold: true },
+        { label: 'Biogas at reactor temperature', value: fmt(act / (v.ch4 / 100), 0), unit: 'm³ gas/d', bold: true },
         { label: 'Energy (LHV)', value: fmt(stp * 35.8 / 3.6, 0), unit: 'kWh/d' },
       ], status: { level: 'info', text: 'Measured gas is usually lower: some methane leaves dissolved in the effluent (significant in cool, dilute wastes).' } };
     },
@@ -4773,9 +4774,9 @@ const GEN = [
     return { q: `A digester has volatile acids of ${va} mg/L and alkalinity of ${alk} mg/L. What is the VA:ALK ratio, and is it healthy?`, ...numOpts(r, [alk / va, r * 10, r * 3], x => nf(x, 2) + (x <= 0.2 ? ' (stable)' : x < 0.5 ? ' (early upset)' : ' (upset)')), why: `${va} ÷ ${alk} = ${nf(r, 2)}. Below about 0.2 is stable; 0.3–0.5 means act; 0.5 or above is an upset.` };
   },
   () => { // MBR flux
-    if (UNITS === 'US') { const q = rpick([0.5, 1, 1.5, 2]), a = rint(40, 120) * 1000, gfd = q * 1e6 / a;
+    if (UNITS === 'US') { const q = rpick([0.5, 1, 1.5, 2]), a = Math.round(q * 1e6 / rint(7, 16) / 1000) * 1000, gfd = q * 1e6 / a;
       return { q: `An MBR produces ${q} MGD of permeate through ${nf(a)} ft² of membrane. What is the flux?`, ...numOpts(gfd, [gfd * 24, gfd / 1.7, gfd * 1.7], x => nf(x, 1) + ' gfd'), why: `Flux = ${nf(q * 1e6)} gal/d ÷ ${nf(a)} ft² = ${nf(gfd, 1)} gfd (× 1.7 ≈ LMH).` }; }
-    const q = rint(2, 20), a = rint(20, 80) * 1000, j = q * 1e6 / 24 / a;
+    const j0 = rint(12, 28), q = rint(2, 20), a = Math.round(q * 1e6 / 24 / j0 / 100) * 100, j = q * 1e6 / 24 / a;
     return { q: `An MBR produces ${q} ML/d of permeate through ${nf(a)} m² of membrane. What is the average flux?`, ...numOpts(j, [j * 24, q * 1000 / a, j * 1000 / 24], x => nf(x, 1) + ' LMH'), why: `Flux = ${q} × 10⁶ L/d ÷ 24 ÷ ${nf(a)} m² = ${nf(j, 1)} L/m²·h.` };
   },
   () => { // CT
@@ -4861,7 +4862,7 @@ QB.push(
   {"id":"a049","topic":"Nutrient removal","level":2,"q":"Why does nitrate or DO entering the anaerobic zone reduce EBPR performance?","options":["Other heterotrophs use up the VFAs before PAOs can take them up","Nitrate chemically precipitates the released phosphate","Dissolved oxygen instantly kills PAOs","Nitrate raises the pH beyond the PAO tolerance range"],"answer":0,"why":"With an electron acceptor present, ordinary heterotrophs and denitrifiers consume the readily biodegradable COD and VFAs. That leaves less carbon for PAOs to store, so less P is taken up aerobically."},
   {"id":"a050","topic":"Nutrient removal","level":3,"q":"What is secondary phosphorus release?","options":["Normal P uptake by PAOs in the aerobic zone","P release by PAOs without VFA uptake, so no PHA is stored to fuel re-uptake","Nitrogen gas release in the secondary clarifier","Phosphate release caused by overdosing metal salts"],"answer":1,"why":"Secondary release happens in over-long anaerobic or unaerated zones, sludge holding or thickening, when PAOs release P for maintenance energy without storing carbon. That P cannot be taken back up, so effluent P rises."},
   {"id":"a051","topic":"Nutrient removal","level":3,"q":"What role do glycogen-accumulating organisms (GAOs) play in EBPR systems?","options":["They remove phosphate faster than PAOs do","They oxidise ammonia in the aerobic zone","They compete with PAOs for anaerobic VFAs but remove no P; warm temperatures favour them","They are filamentous bacteria that cause bulking"],"answer":2,"why":"GAOs take up VFAs anaerobically using glycogen rather than polyphosphate, so they use carbon without removing P. High temperature, low pH and a high VFA:P ratio tend to favour them over PAOs."},
-  {"id":"a052","topic":"Nutrient removal","level":2,"q":"In theory, 1 mol of Fe³⁺ precipitates 1 mol of phosphate-P. About how much iron is needed per kg of P removed (theoretical)?","options":["0.9 kg Fe","1.2 kg Fe","5.0 kg Fe","1.8 kg Fe"],"answer":3,"why":"Mass ratio = 55.8 (Fe) ÷ 31 (P) ≈ 1.8 kg Fe/kg P; for aluminium it is 27 ÷ 31 ≈ 0.87. In practice, molar doses of about 1.5–2.5 times stoichiometric or more are needed, especially at low effluent P."},
+  {"id":"a052","topic":"Nutrient removal","level":2,"q":"A long-SRT plant runs its aerobic zone at about 0.5 mg/L DO, removes ammonia fully and has low nitrate. What explains the low nitrate?","options":["Ammonia stripping to the air","Chemical oxidation by residual chlorine","Simultaneous nitrification-denitrification inside the floc","Phosphate precipitation with metal salts"],"answer":2,"why":"At low bulk DO the inside of each floc is anoxic, so nitrate formed at the surface is denitrified inside (SND). It works at long SRT and low F:M; watch ammonia at peak load and low-DO filaments."},
   {"id":"a053","topic":"Secondary clarifiers","level":1,"q":"A circular secondary clarifier is 20 m in diameter and receives 7,850 m³/d of influent (excluding RAS). What is the surface overflow rate?","options":["25 m³/m²·d","50 m³/m²·d","12.5 m³/m²·d","100 m³/m²·d"],"answer":0,"why":"Area = π × 10² ≈ 314 m². SOR = 7,850 ÷ 314 ≈ 25 m³/m²·d. RAS is left out of SOR because it leaves through the floor, not over the weirs."},
   {"id":"a054","topic":"Secondary clarifiers","level":2,"q":"A clarifier with 400 m² area receives Q = 8,000 m³/d and RAS = 4,000 m³/d at MLSS 3,000 mg/L. What is the solids loading rate?","options":["60 kg/m²·d","90 kg/m²·d","30 kg/m²·d","120 kg/m²·d"],"answer":1,"why":"SLR includes RAS: (8,000 + 4,000) × 3,000 ÷ 1,000 = 36,000 kg/d, and 36,000 ÷ 400 = 90 kg/m²·d. Leaving out RAS gives the wrong answer of 60."},
   {"id":"a055","topic":"Secondary clarifiers","level":1,"q":"What sludge blanket depth is commonly targeted in a secondary clarifier?","options":["No blanket at all (0 m)","More than half the side-water depth","0.3–0.9 m (1–3 ft)","Up to just below the effluent weirs"],"answer":2,"why":"A shallow blanket of about 0.3–0.9 m thickens the RAS while leaving a large clear zone. Deep blankets risk solids washout at peak flow and denitrification; no blanket means thin RAS."},
@@ -4904,7 +4905,7 @@ QB.push(
   {"id":"b025","topic":"Anaerobic digestion","level":2,"q":"Which is a common cause of anaerobic digester foaming?","options":["Feed volatile solids content that is too low","Excess bicarbonate alkalinity","Operating the digester at 35 °C","Foam-forming filaments such as Gordonia in the WAS"],"answer":3,"why":"Filaments such as Gordonia (Nocardia) carry through in WAS and stabilise foam. Other causes include sudden loading changes, FOG and surfactants, and poor or intermittent mixing."},
   {"id":"b026","topic":"Anaerobic digestion","level":1,"q":"What is the main reason anaerobic digesters are mixed?","options":["To add oxygen for the methanogens","To keep contents uniform and stop scum and grit taking up volume","To strip ammonia out of the sludge","To cool the digester contents"],"answer":1,"why":"Mixing brings bacteria into contact with feed, evens out temperature and prevents scum and grit layers that reduce active volume and SRT. Oxygen must be excluded because methanogens are strict anaerobes."},
   {"id":"b027","topic":"Anaerobic digestion","level":2,"q":"Feed sludge is 75% volatile and digested sludge is 60% volatile. Using the Van Kleeck equation, what is the volatile solids reduction?","options":["15%","20%","50%","40%"],"answer":2,"why":"VSR = (Fin − Fout) ÷ (Fin − Fin × Fout) = (0.75 − 0.60) ÷ (0.75 − 0.45) = 0.15 ÷ 0.30 = 50%. Simply subtracting the percentages (15%) ignores the loss of total mass."},
-  {"id":"b028","topic":"Anaerobic digestion","level":1,"q":"Methane is explosive in air within approximately what concentration range?","options":["5–15% by volume","0.5–1.5% by volume","25–45% by volume","60–75% by volume"],"answer":0,"why":"Methane’s lower and upper explosive limits are about 5% and 15%. Biogas leaking into air can pass through this range, so use gas detection, flame arrestors and ignition-source control."},
+  {"id":"b028","topic":"Nutrient removal","level":2,"q":"In an intermittently aerated basin, effluent ammonia is low but nitrate is high. What is the first adjustment?","options":["Increase the air-on time to raise the average DO","Raise the RAS rate to return more sludge to the basin","Add more coagulant to the aerobic zone","Shorten the air-on time"],"answer":3,"why":"Low ammonia with high nitrate means nitrification is complete but the air-off (anoxic) time is too short. Shorten the air-on time or lower the DO setpoint in small steps while ammonia stays below target; lengthen it again if ammonia rises."},
   {"id":"b029","topic":"Aerobic digestion","level":1,"q":"In cold weather, what is needed to keep the same volatile solids reduction in an aerobic digester?","options":["A longer SRT","A shorter SRT","A lower DO set-point","A higher feed rate"],"answer":0,"why":"Endogenous decay slows as temperature falls, so more time is needed. Performance is often related to the temperature × SRT product (degree-days)."},
   {"id":"b030","topic":"Aerobic digestion","level":2,"q":"An aerobic digester operates at 18 °C with an SRT of 30 days. What is its temperature × SRT product?","options":["48 °C·d","1.67 °C·d","540 °C·d","12 °C·d"],"answer":2,"why":"18 °C × 30 d = 540 °C·d. Volatile solids reduction rises quickly with degree-days and starts to level off at about 500 °C·d; at least 550 °C·d is recommended, and about 900 °C·d gives roughly 45% VS reduction."},
   {"id":"b031","topic":"Aerobic digestion","level":1,"q":"What residual dissolved oxygen is typically maintained in an aerobic digester?","options":["0 mg/L","At least 1–2 mg/L","At least 8–10 mg/L","Exactly 0.2 mg/L"],"answer":1,"why":"A residual of about 1–2 mg/L keeps the digester aerobic and limits odours. Much higher DO wastes energy; near-zero DO risks odours and poor stabilisation."},
@@ -4940,8 +4941,8 @@ QB.push(
   {"id":"b061","topic":"Chemicals","level":3,"q":"For ferric phosphate precipitation the theoretical requirement is 1 mol Fe per mol P. Roughly how many kg of iron is this per kg of phosphorus?","options":["1.8 kg Fe/kg P","1.0 kg Fe/kg P","0.55 kg Fe/kg P","5.4 kg Fe/kg P"],"answer":0,"why":"Fe (55.8 g/mol) ÷ P (31.0 g/mol) ≈ 1.8 (for alum, Al:P ≈ 0.87). Real plants need molar ratios of about 1.5–2.5 or more for low P, because metal hydroxide also forms."},
   {"id":"b062","topic":"Chemicals","level":2,"q":"What is a key operational advantage of magnesium hydroxide over caustic soda for alkalinity addition?","options":["It dissolves instantly for very fast pH correction","It needs no mixing to stay in suspension","Its low solubility and slow dissolution keep pH from rising much above about 9 in wastewater, reducing overdose risk","It adds no solids at all to the process"],"answer":2,"why":"Mg(OH)₂ is a slurry that dissolves slowly; in buffered wastewater it rarely raises pH much above about 9 (a saturated solution in pure water is about pH 10.4), and it is less hazardous to handle. Caustic acts fast but can overshoot pH; lime adds solids and scale; sodium bicarbonate is gentle but costly."},
   {"id":"b063","topic":"Chemicals","level":2,"q":"An anoxic stage must remove 10 mg/L nitrate-N from 2,000 m³/d using methanol at 3 kg per kg nitrate-N. What methanol dose is needed per day?","options":["6 kg/d","20 kg/d","600 kg/d","60 kg/d"],"answer":3,"why":"10 mg/L × 2,000 m³/d ÷ 1,000 = 20 kg/d NO₃-N; × 3 = 60 kg/d methanol. Methanol supplies readily biodegradable carbon when influent BOD is insufficient; it is highly flammable and burns with a nearly invisible flame."},
-  {"id":"b064","topic":"Chemicals","level":1,"q":"Why must sodium hypochlorite never be mixed with acids such as ferric chloride or citric acid?","options":["It releases toxic chlorine gas","It releases flammable hydrogen gas","It produces carbon monoxide gas","It forms explosive methane gas"],"answer":0,"why":"Acid lowers the pH of hypochlorite and liberates chlorine gas. Keep separate bunds, fill points and labelled lines; hypochlorite mixed with ammonia also forms toxic chloramines."},
-  {"id":"b065","topic":"Chemicals","level":1,"q":"Where should an operator first look for a chemical’s required PPE, first aid measures and incompatible materials?","options":["The chemical delivery invoice","The Safety Data Sheet (SDS)","The plant’s P&ID drawings","The dosing pump manual"],"answer":1,"why":"The SDS lists hazards, PPE, first aid, storage, incompatibilities and spill response. Keep current SDSs accessible wherever the chemical is stored and used."}
+  {"id":"b064","topic":"MBR","level":2,"q":"Before a membrane recovery clean with hypochlorite, which step protects the biology in the bioreactor?","options":["Raise the bioreactor DO setpoint for the day","Isolate the train and drain the mixed liquor out of the membrane tank","Stop the WAS pumps until the clean finishes","Add caustic to the bioreactor to buffer the pH"],"answer":1,"why":"Recovery cleans soak the membranes in strong hypochlorite (about 1,000–2,000 mg/L) or acid. The train is isolated and drained first so the cleaning solution does not reach the bioreactor, and the spent solution is returned slowly or neutralised."},
+  {"id":"b065","topic":"Nutrient removal","level":2,"q":"Bio-P removal suddenly fails and the anaerobic-zone ORP rises from about −250 to −50 mV. What is the most likely cause?","options":["Heavy rain diluting the influent phosphorus","Nitrate or oxygen entering the anaerobic zone with the RAS or a recycle","Too much alum being dosed to the membrane tank","Effluent suspended solids being too low"],"answer":1,"why":"A rising ORP shows an electron acceptor (nitrate or oxygen) reaching the anaerobic zone. Heterotrophs then use the VFA that the PAOs need, so less P is released and taken up. Check RAS nitrate and any DO entering the zone."}
 );
 QB.push(
   {"id":"c001","topic":"Laboratory & sampling","level":2,"q":"For a BOD₅ dilution to be accepted as valid, which dissolved oxygen criteria should it meet after 5 days?","options":["Depletion of at least 2.0 mg/L and final DO of at least 1.0 mg/L","Depletion of at least 0.5 mg/L and final DO of at least 0.2 mg/L","Depletion of at least 4.0 mg/L and a final DO of zero","Depletion below 1.0 mg/L and final DO above 7.0 mg/L"],"answer":0,"why":"Standard Methods requires a depletion of at least 2.0 mg/L and a residual of at least 1.0 mg/L. Smaller depletions are too imprecise, and a lower residual means oxygen may have run out and limited the demand."},
@@ -4961,14 +4962,14 @@ QB.push(
   {"id":"c015","topic":"Laboratory & sampling","level":2,"q":"In the cadmium reduction method for nitrate, nitrate is converted to what before the colour is measured?","options":["Ammonia","Nitrite","Nitrogen gas","Organic nitrogen"],"answer":1,"why":"The copperised cadmium column reduces nitrate to nitrite, which is then measured colorimetrically. Original nitrite is measured separately and subtracted."},
   {"id":"c016","topic":"Safety","level":1,"q":"In what order should the atmosphere in a confined space be tested before entry?","options":["Toxic gases, then flammable gases, then oxygen","Flammable gases, then oxygen, then toxic gases","Oxygen, then flammable gases, then toxic gases","Toxic gases, then oxygen, then flammable gases"],"answer":2,"why":"Oxygen is tested first because a deficient atmosphere is immediately dangerous and many combustible sensors need enough oxygen to read correctly. Flammables come next, then toxic gases such as H₂S and CO."},
   {"id":"c017","topic":"Safety","level":1,"q":"Where is hydrogen sulfide most likely to accumulate in a pump station or pit?","options":["Near the floor and in low points, as it is heavier than air","Near the ceiling, as it is lighter than air","Evenly throughout, as it mixes with air instantly","Only in the liquid, as it never leaves solution"],"answer":0,"why":"H₂S has a specific gravity of about 1.19, so it collects in low areas such as wet wells, pits and trenches. Test at all levels, especially near the bottom."},
-  {"id":"c018","topic":"Safety","level":1,"q":"Why can’t an operator rely on smell to warn of dangerous hydrogen sulfide levels?","options":["H₂S has no odour at any concentration","Smell fatigues quickly and is lost as the concentration rises","Only trained people can smell H₂S below 50 ppm","H₂S smells like chlorine and is easily confused"],"answer":1,"why":"H₂S smells of rotten eggs at very low levels, but the sense of smell fatigues with continued exposure, even at lower concentrations, Loss of smell is reported within minutes at 10–30 ppm, and the sense of smell is paralysed at around 100–150 ppm (100 ppm is the IDLH). Odour is never a reliable warning; always use a calibrated gas detector."},
+  {"id":"c018","topic":"Safety","level":1,"q":"Why can’t an operator rely on smell to warn of dangerous hydrogen sulfide levels?","options":["H₂S has no odour at any concentration","Smell fatigues quickly and is lost as the concentration rises","Only trained people can smell H₂S below 50 ppm","H₂S smells like chlorine and is easily confused"],"answer":1,"why":"H₂S smells of rotten eggs at very low levels, but the sense of smell fatigues with continued exposure, even at lower concentrations. Loss of smell is reported within minutes at 10–30 ppm, and the sense of smell is paralysed at around 100–150 ppm (100 ppm is the IDLH). Odour is never a reliable warning; always use a calibrated gas detector."},
   {"id":"c019","topic":"Safety","level":2,"q":"What is the explosive (flammable) range of methane in air?","options":["15% to 25% by volume","1% to 5% by volume","0.5% to 2% by volume","5% to 15% by volume"],"answer":3,"why":"Methane has an LEL of 5% and a UEL of 15%. It is lighter than air, so it collects in high points such as digester roofs and covered tanks; a rich mixture becomes explosive as air dilutes it."},
   {"id":"c020","topic":"Safety","level":1,"q":"Below what oxygen concentration is an atmosphere generally classed as oxygen-deficient for entry?","options":["Below 19.5%","Below 21.5%","Below 23.5%","Below 15.0%"],"answer":0,"why":"Normal air is about 20.9% oxygen. Below 19.5% is oxygen-deficient and requires ventilation or supplied air; oxygen can be displaced by gases such as CO₂, methane or nitrogen."},
   {"id":"c021","topic":"Safety","level":1,"q":"You notice a yellow-green gas and a sharp smell near the chlorine store. What should you do first?","options":["Move downwind and to low ground","Stay in the chlorine room and close the door","Move upwind and to higher ground","Spray water directly onto the leaking cylinder"],"answer":2,"why":"Chlorine is about 2.5 times heavier than air and flows along the ground, so move upwind and uphill and raise the alarm. Water on a leak forms acid that worsens corrosion and the leak."},
   {"id":"c022","topic":"Safety","level":1,"q":"An entrant collapses inside a confined space. What should the attendant do?","options":["Enter immediately to pull the worker out","Leave the entry point to find a supervisor in person","Remove the ventilation duct to make more room","Stay outside, raise the alarm and start non-entry rescue (e.g. winch)"],"answer":3,"why":"Many confined-space deaths are would-be rescuers overcome by the same atmosphere. The attendant must never enter without proper rescue equipment and backup, and should use the retrieval system."},
   {"id":"c023","topic":"Safety","level":2,"q":"Forced ventilation is running in a wet well during entry. What is correct atmospheric monitoring practice?","options":["Test once before entry, then switch the detector off","Monitor continuously throughout the entry, as conditions can change","No testing is needed while the fan is running","Test only at the top, where the fan discharges"],"answer":1,"why":"Gas can be released suddenly from sludge or inflows, and fans can fail. Continuous monitoring with a personal detector at the worker’s breathing zone is required for the whole entry."},
   {"id":"c024","topic":"Safety","level":1,"q":"After isolating and locking out a pump, what should be done before starting work?","options":["Verify zero energy, e.g. attempt a local start and release stored pressure","Ask the control room to disable the pump alarm only","Hang a tag on the switch and rely on the tag alone","Remove the fuses and give them to the next shift"],"answer":0,"why":"Lockout is not complete until isolation is proven. Try to start the equipment (then return controls to off), and bleed off stored energy such as pressure or raised loads."},
-  {"id":"c025","topic":"Safety","level":1,"q":"Which vaccinations are most commonly recommended for wastewater workers?","options":["Yellow fever and typhus","Tetanus and hepatitis A","Rabies and Japanese encephalitis","Measles and chickenpox"],"answer":1,"why":"Tetanus can enter through cuts and hepatitis A spreads by the faecal-oral route, both relevant to sewage work. Hepatitis B or others may be advised; follow your occupational health provider."},
+  {"id":"c025","topic":"Safety","level":1,"q":"Which vaccinations are commonly recommended for wastewater workers in many countries (check your occupational health provider)?","options":["Yellow fever and typhus","Tetanus and hepatitis A","Rabies and Japanese encephalitis","Measles and chickenpox"],"answer":1,"why":"Tetanus can enter through cuts and hepatitis A spreads by the faecal-oral route, both relevant to sewage work. Hepatitis B or others may be advised; follow your occupational health provider."},
   {"id":"c026","topic":"Safety","level":1,"q":"Which practice best reduces the risk of infection from wastewater?","options":["Wear work clothes home so they can be laundered","Use hand sanitiser only at the end of the shift","Wash hands thoroughly before eating, drinking or smoking","Cover cuts only when working directly on raw sewage"],"answer":2,"why":"Hand-to-mouth contact is the main route for wastewater pathogens. Wash hands before eating, drinking or smoking, keep cuts covered at all times, and leave work clothing at work."},
   {"id":"c027","topic":"Safety","level":2,"q":"Why is falling into an aerated tank particularly dangerous?","options":["The dissolved oxygen makes the water extremely cold","Mixed liquor is always strongly acidic","Aerators pull people towards the inlet pipe","Air bubbles reduce the water’s density, so a person floats poorly"],"answer":3,"why":"Aeration lowers the bulk density of the liquid, reducing buoyancy even for someone wearing a lifejacket. Guardrails, lifebuoys, not working alone and not jumping in to rescue are key controls."},
   {"id":"c028","topic":"Safety","level":1,"q":"Where should an operator first look for the correct PPE and first aid for a new treatment chemical?","options":["The Safety Data Sheet (SDS) for that chemical","The plant’s process flow diagram","The dosing pump manufacturer’s manual","The daily operating log sheet"],"answer":0,"why":"The SDS lists hazards, required PPE, first-aid measures, spill response, storage and incompatibilities for the chemical, and must be available wherever it is used."},
@@ -5034,7 +5035,7 @@ const TS = [
       { see: 'Thick, scummy dark-tan or brown foam (greasy, stable)',
         causes: ['Critically underloaded old sludge, MLSS too high', 'Nocardia / Gordonia-type foam', 'Microthrix parvicella (grease/LCFA, cold weather, low DO, long SRT)'],
         checks: ['Microscope: branched Gram-positive filaments in the foam', 'MCRT'],
-        actions: ['Increase WAS by no more than 10% per day', 'Remove the foam physically; do not return it to the headworks or digesters', 'Chlorinating RAS does not control Nocardia: most of it is in the foam', 'Other options: selector or anoxic zone, shorter SRT, cationic polymer, chlorine spray on the foam, surface wasting (foam traps)', 'Microthrix: cut FOG load and septic grease; polyaluminium chloride (PAX/PACl) at about 2–3 g Al/kg MLSS·d, with SRT reduction as support'],
+        actions: ['Increase WAS by no more than 10% per day', 'Remove the foam physically; do not return it to the headworks or digesters', 'Chlorinating RAS does not control Nocardia: most of it is in the foam', 'Other options: selector or anoxic zone, shorter SRT, cationic polymer, chlorine spray on the foam, surface wasting (selective foam wasting / skimming)', 'Microthrix: cut FOG load and septic grease; polyaluminium chloride (PAX/PACl) at about 2–3 g Al/kg MLSS·d, with SRT reduction as support'],
         note: 'This foam carries into digesters and causes digester foaming. Control Gordonia and Microthrix in the activated sludge first.' },
       { see: 'Dark-brown or black sudsy foam with a septic odour',
         causes: ['Anaerobic conditions in the reactor', 'Dyes or inks in trade waste'],
@@ -5043,7 +5044,7 @@ const TS = [
       { see: 'Light-tan foam, 50–80 mm, covering 10–25% of the surface',
         causes: ['Normal for a healthy nitrifying / BNR sludge'], checks: ['Trend only'], actions: ['No action needed'] },
       { see: 'MBR: foam from surfactants',
-        causes: ['Surfactant slug in the influent (one case: scented surfactant)'], checks: ['Trade waste or catchment event'],
+        causes: ['Surfactant slug in the influent'], checks: ['Trade waste or catchment event'],
         actions: ['Knock foam down with water sprays; let it overflow to a tank where it can be wasted; trace the surfactant source'] },
     ],
   },
@@ -5112,7 +5113,7 @@ const TS = [
   {
     id: 'tss', group: 'Effluent quality', name: 'High effluent TSS',
     summary: 'For a clarifier plant, first decide whether the settleometer looks good or bad. A good settleometer points to the clarifier or hydraulics; a poor one points to the biology. For an MBR, high permeate solids means the membrane barrier is compromised.',
-    qld: 'Effluent limits are set by your discharge permit or licence; follow your local regulator.',
+    aside: 'Effluent limits are set by your discharge permit or licence; follow your local regulator.',
     calc: ['slr', 'ras', 'svi', 'clgeo'],
     rows: [
       { see: 'Clouds of homogeneous solids near the weirs; settleometer settles well with clear supernatant',
@@ -5142,7 +5143,7 @@ const TS = [
   {
     id: 'nh3', group: 'Effluent quality', name: 'High effluent ammonia',
     summary: 'Check SRT against temperature, DO, alkalinity and pH, then inhibitors. Thresholds below are operator guide values.',
-    qld: 'Many design examples assume cold (10–12 °C) winters. Warm-climate plants nitrify at much shorter SRTs. Use the Min. SRT for nitrification calculator with your own temperatures.',
+    aside: 'Many design examples assume cold (10–12 °C) winters. Warm-climate plants nitrify at much shorter SRTs. Use the Min. SRT for nitrification calculator with your own temperatures.',
     calc: ['nitsrt', 'alk', 'srt', 'o2'],
     rows: [
       { see: 'NH₄-N above about 3 mg/L while BOD is fine',
@@ -5165,7 +5166,7 @@ const TS = [
         checks: ['Trade waste; metals scan of influent', 'Oxygen uptake rate: about 2 mg O₂/g·h suggests toxicity'],
         actions: ['Trace and stop the source through trade waste controls'] },
       { see: 'MBR: nitrification falling',
-        causes: ['Low DO in the bioreactor'], checks: ['Bioreactor DO 1.5–2.5 mg/L; nitrification falls below about 1 mg/L and is inhibited at 0.5 mg/L'],
+        causes: ['Low DO in the bioreactor'], checks: ['Bioreactor DO 1.5–2.5 mg/L (some long-SRT plants run 0.5–1 mg/L). Below about 1 mg/L the nitrification rate falls (about half at 0.5 mg/L), so a longer aerobic SRT is needed; check NH₄-N at peak load'],
         actions: ['Restore DO. Complete nitrification is reported across SRT 5–72 d'] },
     ],
   },
@@ -5187,14 +5188,42 @@ const TS = [
         actions: ['Supplemental carbon: methanol at about 3 mg/L per mg/L NO₃-N removed'] },
       { see: 'Oxidation ditch: TN up',
         causes: ['Anoxic volume or cycling not matched to load'], checks: ['DO profile around the loop; aerator on/off pattern'],
-        actions: ['Restore a real low-DO zone; typical ditch MCRT 20–30 d, HRT 18–30 h, RAS 50–100%'] },
+        actions: ['Restore a real low-DO zone; typical ditch MCRT 20–30 d, HRT 18–30 h, RAS 50–150%'] },
+      { see: 'Intermittent or SND plant: TN up',
+        causes: ['Aerobic share of the cycle too long (NO₃ high) or too short (NH₄ high)', 'DO setpoint too high for SND'], checks: ['End-of-aerobic NH₄-N and end-of-anoxic NO₃-N', 'DO profile during on and off periods'],
+        actions: ['Shorten aeration if NO₃ is high and NH₄ low; lengthen it if NH₄ is high', 'Lower the DO setpoint in steps of 0.2 mg/L while NH₄-N stays below target'] },
+    ],
+  },
+  {
+    id: 'hip', group: 'Effluent quality', name: 'High effluent phosphorus',
+    summary: 'Phosphorus above target: biological P removal is starved, disturbed by nitrate or oxygen, or P is released again downstream.',
+    calc: ['ebpr', 'chem'],
+    rows: [
+      { see: 'Bio-P falling, nitrate in the RAS or anaerobic zone',
+        causes: ['Nitrate or DO reaching the anaerobic zone uses the VFA before PAOs can'], checks: ['RAS NO₃-N; anaerobic zone ORP (aim below about −150 mV)'],
+        actions: ['Lower RAS nitrate (better denitrification, or return RAS to an anoxic zone first)', 'Stop aeration or splashing that adds DO to the anaerobic zone'] },
+      { see: 'Bio-P poor with weak or dilute influent',
+        causes: ['Not enough VFA / readily biodegradable COD (BOD:TP below about 20)'], checks: ['Influent rbCOD or VFA; BOD:TP ratio'],
+        actions: ['Add VFA (fermenter or acetate dosing) or trim with metal salt'] },
+      { see: 'P rises after long holding or at low load',
+        causes: ['Secondary release: anaerobic HRT over about 3 h, long sludge holding, thickener or digester returns'], checks: ['Anaerobic HRT at low flow; PO₄ in return liquors'],
+        actions: ['Shorten holding times; return side streams at low load or treat them'] },
+      { see: 'Bio-P lost after an SRT change',
+        causes: ['PAO washout at short SRT, or decay at very long SRT'], checks: ['SRT against the usual 10–25 d EBPR range'],
+        actions: ['Bring SRT back into range and hold it steady'] },
+      { see: 'Poor bio-P in warm weather although VFA is fine',
+        causes: ['Glycogen-accumulating organisms (GAOs) out-compete PAOs above about 25 °C'], checks: ['Temperature; VFA uptake without P release'],
+        actions: ['Shorten anaerobic HRT or SRT; feed some propionate if possible; keep metal-salt trim ready'] },
+      { see: 'Total P high but soluble P low',
+        causes: ['Solids carry-over (biomass holds about 2–3% P of VSS)'], checks: ['Effluent TSS; clarifier or membrane integrity'],
+        actions: ['Fix the solids loss first (see the clarifier and MBR topics)'] },
     ],
   },
   // ===== MBR =====
   {
     id: 'tmp', group: 'MBR', name: 'High TMP / falling permeability',
     summary: 'At constant flux a climbing TMP means fouling. Trend temperature-corrected permeability so that a cold spell is not read as fouling.',
-    qld: 'Flux, TMP and cleaning limits differ by membrane supplier. Use the supplier’s O&M limits for set-points.',
+    aside: 'Flux, TMP and cleaning limits differ by membrane supplier. Use the supplier’s O&M limits for set-points.',
     calc: ['flux', 'tmp', 'sad', 'mrec', 'cip'],
     rows: [
       { see: 'TMP climbing steadily at constant flux',
@@ -5206,11 +5235,11 @@ const TS = [
         checks: ['Scour air flow and distribution; blocked aerators'],
         actions: ['Restore scour. More scour air lowers TMP at the same flux', 'Flush the membrane aerators'] },
       { see: 'Permeability falling as MLSS rises',
-        causes: ['High MLSS and viscosity. In one study flux fell about 10-fold as MLSS went from 8,000 to about 18,000 mg/L'],
+        causes: ['High MLSS and viscosity in the membrane tank'],
         checks: ['MLSS in the membrane tank. Viscosity and fouling rise sharply above about 15–18 g/L; most suppliers cap membrane-tank MLSS at 12–15 g/L'],
         actions: ['Waste to bring MLSS back to the design range'] },
       { see: 'Fouling with sludge stress (shock load, upset, young sludge)',
-        causes: ['EPS from stressed biomass is the main foulant; cutting EPS 40% cut cake resistance about 40%', 'Stationary or death-phase sludge fouled far more (flux to 20% of start vs 50% in log phase)'],
+        causes: ['Stressed biomass releases EPS/SMP, the main foulants (shock loads, low DO, toxicity, sudden SRT change)'],
         checks: ['Recent shock loads, low DO, toxic events'],
         actions: ['Stabilise the biology first; hold flux down until it recovers'] },
       { see: 'Permeability not recovered by maintenance cleans',
@@ -5280,7 +5309,7 @@ const TS = [
   {
     id: 'aerdig', group: 'Digestion', name: 'Aerobic digester problems',
     summary: 'Daily indicators are temperature, pH, DO, odour and settling.',
-    qld: 'SOUR 1.5 mg O₂/g TS·h, 38% VS reduction and 40 d at 20 °C are US Part 503 criteria. Follow the biosolids rules that apply where you operate.',
+    aside: 'SOUR 1.5 mg O₂/g TS·h, 38% VS reduction and 40 d at 20 °C are US Part 503 criteria. Follow the biosolids rules that apply where you operate.',
     calc: ['aerd', 'sour'],
     rows: [
       { see: 'pH below about 6.0–6.5',
@@ -5301,7 +5330,7 @@ const TS = [
       { see: 'Low VS reduction',
         causes: ['SRT too short; single stage; dilute feed'],
         checks: ['SRT and temperature; staging'],
-        actions: ['Expect about 35–40% VSR at 400–600 °C·d; 40–50% needs about 600–900 °C·d or more (e.g. 40 d at 20 °C)', 'Staging and prethickening help: 2 basins at 14–19 d gave 27–31% VSR; 29 d was needed to exceed 38%'] },
+        actions: ['Expect about 35–40% VSR at 400–600 °C·d; 40–50% needs about 600–900 °C·d or more (e.g. 40 d at 20 °C)', 'Staging (two or more basins in series) and prethickening raise VSR for the same volume'] },
     ],
   },
   {
@@ -5451,8 +5480,10 @@ const CARDS = [
     { p: 'MLE: SRT / HRT', v: '7–20 d / 5–15 h', note: 'Anoxic 20–40% of volume; RAS 50–100%; MLR 100–400%' },
     { p: '4-stage Bardenpho: SRT / HRT', v: '10–20 d / 8–20 h', note: 'Effluent TN below 3–5 mg/L achievable' },
     { p: 'A²O / 5-stage Bardenpho: SRT', v: '10–25 d', note: 'Anaerobic HRT 0.25–1.5 h; beyond about 3 h secondary P release becomes likely' },
-    { p: 'Oxidation ditch: SRT / HRT', v: '20–30 d / 18–30 h', note: 'RAS 50–100%; simultaneous nitrification-denitrification in low-DO zones' },
+    { p: 'Oxidation ditch: SRT / HRT', v: '20–30 d / 18–30 h', note: 'RAS 50–150%; simultaneous nitrification-denitrification in low-DO zones' },
     { p: 'Step-feed: SRT / HRT', v: '7–20 d / 4–12 h', note: 'RAS 30–75%' },
+    { p: 'Intermittent / alternating aeration', v: 'Aerobic 50–70% of cycle; cycles 1–4 h', note: 'Set on/off times from NH₄-N and NO₃-N (end-of-aerobic NH₄-N about 1 mg/L, end-of-anoxic NO₃-N about 1 mg/L). Only the aerated time counts toward nitrifier SRT, so total SRT must be longer. Keep mixing during off periods' },
+    { p: 'Low-DO / simultaneous nitrification-denitrification (SND)', v: 'DO 0.3–0.8 mg/L', note: 'Works at long SRT (about 15 d or more) and low F:M; watch NH₄-N at peak load and M. parvicella / SVI. Not suitable at high F:M (low-DO bulking)' },
     { p: 'Anoxic zone DO', v: '< 0.2 mg/L' },
     { p: 'Anaerobic zone DO / NO₃-N', v: '< 0.2 mg/L / < 0.5 mg/L' },
     { p: 'ORP, aerobic', v: '+50 to +250 mV' },
@@ -5497,10 +5528,10 @@ const CARDS = [
     { p: 'Net flux, average', v: '12–25 LMH', note: 'Design is set by the supplier and temperature' },
     { p: 'Net flux, peak (hours)', v: '25–40 LMH' },
     { p: 'TMP, normal operation', v: '5–40 kPa', note: 'Clean membranes often 5–15 kPa' },
-    { p: 'TMP limit for cleaning', v: '40–60 kPa', note: 'Supplier specific' },
+    { p: 'TMP limit for cleaning', v: 'Hollow fibre about 40–60 kPa; flat sheet about 20 kPa', note: 'Supplier specific' },
     { p: 'Permeability (20 °C)', v: '100–300 LMH/bar', note: 'Clean 250–500; clean when about 50% of clean value' },
-    { p: 'Bioreactor MLSS', v: '8,000–12,000 mg/L' },
-    { p: 'Membrane tank MLSS', v: '10,000–15,000 mg/L', note: 'Viscosity and fouling rise sharply above about 15–18 g/L' },
+    { p: 'Bioreactor MLSS', v: '6,000–10,000 mg/L', note: 'Some designs run to 12,000; follow the supplier' },
+    { p: 'Membrane tank MLSS', v: '8,000–12,000 mg/L', note: 'Most suppliers cap at about 12,000–15,000; viscosity and fouling rise sharply above about 15 g/L' },
     { p: 'Recirculation (membrane tank → bioreactor)', v: '3–5 × Q' },
     { p: 'SRT', v: '15–40 d' },
     { p: 'Bioreactor HRT', v: '4–10 h' },
@@ -5510,7 +5541,7 @@ const CARDS = [
     { p: 'SADp', v: '10–30 Nm³/m³ permeate' },
     { p: 'Filtration / relax cycle', v: '8–12 min / 0.5–2 min' },
     { p: 'Maintenance clean', v: 'NaOCl 200–500 mg/L, 1–2 × week', note: 'Citric acid 500–2,000 mg/L monthly where scaling' },
-    { p: 'Recovery clean', v: 'NaOCl 1,000–5,000 mg/L + citric 2,000–10,000 mg/L (or oxalic ≈1%), per supplier', note: 'Every 3–12 months; soak 4–12 h. Separate the hypochlorite and acid steps with a full drain and rinse: mixing them releases chlorine gas' },
+    { p: 'Recovery clean', v: 'Recovery: NaOCl 1,000–2,000 mg/L (flat sheet up to about 5,000 per supplier), then citric 2,000–3,000 mg/L (up to about 1% or oxalic per supplier); soak 4–12 h', note: 'Every 3–12 months; soak 4–12 h. Separate the hypochlorite and acid steps with a full drain and rinse: mixing them releases chlorine gas' },
     { p: 'Fine screen ahead of membranes', v: 'About 1 mm hollow fibre (no coarser than 2 mm) · ≤3 mm flat sheet', note: 'Mesh or punched hole, per supplier' },
     { p: 'Bioreactor DO', v: '1.5–2.5 mg/L', note: 'Membrane tank often 3–6 mg/L from scour air' },
     { p: 'Permeate quality', v: 'TSS < 1–2 mg/L, turbidity < 0.2–0.5 NTU' },
@@ -5559,7 +5590,7 @@ const CARDS = [
     { p: 'Methanol for denitrification', v: '≈3 mg/mg NO₃-N' },
     { p: 'Alkalinity factors (per mg CaCO₃)', v: 'NaHCO₃ 1.68 · Na₂CO₃ 1.06 · NaOH 0.80 · Ca(OH)₂ 0.74 · Mg(OH)₂ 0.58' },
   ] },
-  { id: 'dis', name: 'Disinfection', qld: ['Disinfection targets (log reductions, UV dose, chlorine residual, contact time) are set by your discharge permit and any recycled-water scheme approval.'], rows: [
+  { id: 'dis', name: 'Disinfection', aside: ['Disinfection targets (log reductions, UV dose, chlorine residual, contact time) are set by your discharge permit and any recycled-water scheme approval.'], rows: [
     { p: 'Chlorine dose, secondary effluent', v: '5–15 mg/L', note: 'Nitrified effluent at the low end' },
     { p: 'Chlorine dose, MBR permeate', v: '1–5 mg/L' },
     { p: 'Contact time', v: '30–60 min average · ≥15 min peak' },
@@ -5574,7 +5605,7 @@ const CARDS = [
     { p: 'UV lamp life', v: '9,000–16,000 h (low-pressure high-output)' },
     { p: 'UV sleeve cleaning', v: 'Automatic wipers; acid clean when intensity drops' },
     { p: 'Peracetic acid', v: '2–8 mg/L, 15–30 min' },
-    { p: 'Residual chlorine to environment', v: '< 0.05 mg/L (US)', qld: US },
+    { p: 'Residual chlorine to environment', v: 'Often non-detect (about 0.01–0.1 mg/L) in permits', note: 'US EPA freshwater criteria: 0.011 mg/L chronic, 0.019 acute' },
   ] },
   { id: 'thk', name: 'Thickening', rows: [
     { p: 'Gravity thickener, primary', v: '100–150 kg/m²·d → 5–10% TS' },
@@ -5592,7 +5623,7 @@ const CARDS = [
   ] },
   { id: 'aer', name: 'Aerobic digestion', rows: [
     { p: 'SRT', v: '10–20 d (WAS) · 15–25 d (primary + WAS)', note: 'Overall range 10–40 d' },
-    { p: 'Temperature × SRT', v: '400–600 °C·d ≈ 35–40% VSR', note: 'US Class B: 40 d at 20 °C to 60 d at 15 °C (800–900 °C·d)', qld: US },
+    { p: 'Temperature × SRT', v: '400–600 °C·d ≈ 35–40% VSR', note: 'US Class B: 40 d at 20 °C to 60 d at 15 °C (800–900 °C·d)', aside: US },
     { p: 'VS loading', v: '1.6–4.8 kg VS/m³·d (design)', note: 'Lightly loaded digesters (about 0.3–2.2) are common and more stable' },
     { p: 'VS reduction', v: '35–50%' },
     { p: 'DO', v: '1–2 mg/L', note: 'Aerobic/anoxic cycling: 0.1–0.8 average' },
@@ -5603,8 +5634,8 @@ const CARDS = [
     { p: 'Mixing air', v: '0.3–0.6 L/m³·s' },
     { p: 'Air for WAS', v: '0.33–0.67 L/m³·s (20–40 m³/min per 1,000 m³)', note: 'Primary + WAS 0.9–1.1 L/m³·s (55–65 m³/min per 1,000 m³)' },
     { p: 'Digester solids', v: '1.5–3.5% TS', note: 'Oxygen transfer falls above about 3.5–4%' },
-    { p: 'SOUR, stabilised', v: '< 1.5 mg O₂/g TS·h at 20 °C', qld: US },
-    { p: 'VS reduction for vector attraction', v: '≥ 38%', qld: US },
+    { p: 'SOUR, stabilised', v: '< 1.5 mg O₂/g TS·h at 20 °C', aside: US },
+    { p: 'VS reduction for vector attraction', v: '≥ 38%', aside: US },
     { p: 'Supernatant', v: 'TSS 100–10,000 (often about 3,000); TKN 10–400; TP 20–300 mg/L' },
   ] },
   { id: 'ad', name: 'Anaerobic digestion', sub: 'Mesophilic, mixed and heated', rows: [
@@ -5643,7 +5674,7 @@ const CARDS = [
     { p: 'Centrate ammonia (digested sludge)', v: '500–1,500 mg/L NH₄-N', note: 'Can add about 5–20% to the plant N load' },
     { p: 'Polymer make-down', v: '0.1–0.5% solution; age 30–60 min' },
   ] },
-  { id: 'eff', name: 'Effluent quality by process', sub: 'Typical achievable values (licence limits govern)', qld: ['Typical performance only. Your discharge permit sets the limits.'], rows: [
+  { id: 'eff', name: 'Effluent quality by process', sub: 'Typical achievable values (licence limits govern)', aside: ['Typical performance only. Your discharge permit sets the limits.'], rows: [
     { p: 'Secondary (BOD only)', v: 'BOD 10–25 · TSS 10–25 mg/L' },
     { p: 'Nitrifying activated sludge', v: 'NH₄-N < 1–2 mg/L' },
     { p: 'MLE', v: 'TN 5–10 mg/L' },
@@ -5689,7 +5720,7 @@ const LOCAL_NOTES = [
   'Values marked ◆ come from US regulations and are shown for reference only.',
   'Many textbook examples assume cold-climate winters (10–12 °C). Warm-climate plants need shorter SRTs and have lower oxygen solubility.',
   'Chemical strengths vary by supplier and region. Use the certificate of analysis for dosing.',
-  'All units are metric (SI). 1 ML = 1,000 m³; 1 mg/L × 1 ML/d = 1 kg/d.',
+  'Switch between SI and US units in Settings. In SI: 1 ML = 1,000 m³ and 1 mg/L × 1 ML/d = 1 kg/d; in US: lb/d = mg/L × MGD × 8.34.',
 ];
 // ---------- Plant at a glance: diagram built from setup + latest readings ----------
 function plantDiagram(p) {
@@ -5740,7 +5771,7 @@ function renderPlantOverview(p) {
 // ---------- UI ----------
 const $ = (s, el = document) => el.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-const qldBox = t => t ? `<div class="qld"><b>Note</b><span>${typeof ea === 'function' ? ea(t) : esc(t)}</span></div>` : '';
+const noteBox = t => t ? `<div class="nbox"><b>Note</b><span>${typeof ea === 'function' ? ea(t) : esc(t)}</span></div>` : '';
 const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
 
 // Tabs
@@ -5824,7 +5855,7 @@ function renderCalc() {
       <button class="star" id="favbtn" type="button" aria-pressed="${FAVS.includes(c.id)}" aria-label="${FAVS.includes(c.id) ? 'Remove from favourites' : 'Add to favourites'}" title="Favourite">${FAVS.includes(c.id) ? '★' : '☆'}</button></div>${seg}${fields}</div>
     <div class="results"><div class="readout" id="readout" aria-live="polite"></div><div id="cstatus"></div>
       <div class="actions"><input id="lognote" class="lognote" type="text" placeholder="Note for the log (optional), e.g. Reactor 2" aria-label="Note for the log"><button class="btn" id="savelog" type="button">Save to log</button><button class="btn ghost" id="copyres" type="button">Copy</button><button class="btn ghost" id="resetc" type="button">Reset</button><button class="btn ghost" id="openlog" type="button">Saved (${LOG.length})</button><span class="note" id="copymsg" aria-live="polite"></span></div>
-      ${c.qld ? qldBox(c.qld) : ''}</div>
+      ${c.aside ? noteBox(c.aside) : ''}</div>
     <div class="schem" id="cschem" hidden></div>
     <details class="fwork" id="fwork"${fwOpen() ? ' open' : ''}><summary>Formula and working</summary><div class="formula">
       <div><h4>Formula</h4>
@@ -5897,12 +5928,12 @@ const ul = a => a && a.length ? '<ul>' + a.map(x => `<li>${ea(uText(x))}</li>`).
 function renderTs() {
   const t = TS.find(x => x.id === curTs) || TS[0];
   $('#ts-body').innerHTML = `
-    <div class="ts-head"><h2>${esc(t.name)}</h2>${t.summary ? `<p class="lede" style="margin:0">${ea(uText(t.summary))}</p>` : ''}${qldBox(t.qld)}</div>
+    <div class="ts-head"><h2>${esc(t.name)}</h2>${t.summary ? `<p class="lede" style="margin:0">${ea(uText(t.summary))}</p>` : ''}${noteBox(t.aside)}</div>
     <div class="ts-rows">${t.rows.map(r => `
       <article class="ts-row" id="ts-${t.id}-${t.rows.indexOf(r)}">
         <div class="see"><span>${ea(uText(r.see))}</span></div>
         <div class="ts-cols"><div><h4>Likely causes</h4>${ul(r.causes)}</div><div><h4>Check</h4>${ul(r.checks)}</div><div><h4>Act</h4>${ul(r.actions)}</div></div>
-        ${r.qld || r.note ? `<div class="ts-foot">${r.note ? `<div class="apnote">${ea(uText(r.note))}</div>` : ''}${qldBox(uText(r.qld))}</div>` : ''}
+        ${r.aside || r.note ? `<div class="ts-foot">${r.note ? `<div class="apnote">${ea(uText(r.note))}</div>` : ''}${noteBox(uText(r.aside))}</div>` : ''}
       </article>`).join('')}</div>
     ${t.calc ? `<p class="note" style="margin-top:14px">Related calculator: ${t.calc.map(id => { const c = CALCS.find(x => x.id === id); return c ? `<a href="#" data-gocalc="${id}">${esc(c.name)}</a>` : ''; }).join(' · ')}</p>` : ''}`;
   $('#ts-body').querySelectorAll('[data-gocalc]').forEach(a => a.onclick = e => { e.preventDefault(); pickCalc(a.dataset.gocalc); showTab('calc'); window.scrollTo(0, 0); });
@@ -5924,9 +5955,9 @@ function renderCards() {
     <section class="rcard" id="card-${c.id}">
       <div class="top"><h3>${esc(c.name)}</h3>${c.sub ? `<small>${esc(c.sub)}</small>` : ''}</div>
       <div class="tbl"><table><thead><tr><th>Parameter</th><th>Typical</th></tr></thead><tbody>
-      ${c.rows.map((r, i) => `<tr id="row-${c.id}-${i}"><td>${ea(r.p)}${r.qld ? ` <span class="flagq" title="${esc(r.qld)}">◆</span>` : ''}${r.note ? `<div class="note">${ea(uText(r.note))}</div>` : ''}</td><td><div class="val">${ea(uText(r.v))}</div>${UNITS === 'US' && uText(r.v) !== r.v ? `<div class="si">${esc(r.v)}</div>` : ''}</td></tr>`).join('')}
+      ${c.rows.map((r, i) => `<tr id="row-${c.id}-${i}"><td>${ea(r.p)}${r.aside ? ` <span class="flagq" title="${esc(r.aside)}">◆</span>` : ''}${r.note ? `<div class="note">${ea(uText(r.note))}</div>` : ''}</td><td><div class="val">${ea(uText(r.v))}</div>${UNITS === 'US' && uText(r.v) !== r.v ? `<div class="si">${esc(r.v)}</div>` : ''}</td></tr>`).join('')}
       </tbody></table></div>
-      ${(c.qld && c.qld.length) || c.rows.some(r => r.qld) ? `<div class="foot">${(c.qld || []).map(qldBox).join('')}${c.rows.filter(r => r.qld).map(r => qldBox('◆ ' + r.p + ': ' + r.qld)).join('')}</div>` : ''}
+      ${(c.aside && c.aside.length) || c.rows.some(r => r.aside) ? `<div class="foot">${(c.aside || []).map(noteBox).join('')}${c.rows.filter(r => r.aside).map(r => noteBox('◆ ' + r.p + ': ' + r.aside)).join('')}</div>` : ''}
     </section>`).join('') + (curCard !== 'all' ? `<p class="cardmore"><button class="btn ghost" type="button" data-card-all>Show all topics</button>${(() => { const i = CARDS.findIndex(c => c.id === curCard), n = CARDS[i + 1]; return n ? ` <button class="btn ghost" type="button" data-card-next="${n.id}">Next: ${esc(n.name)} →</button>` : ''; })()}</p>` : '');
   const a = $('#cards [data-card-all]'); if (a) a.onclick = () => pickCard('all');
   const nx = $('#cards [data-card-next]'); if (nx) nx.onclick = () => pickCard(nx.dataset.cardNext);
@@ -5945,10 +5976,10 @@ function buildIndex() {
   if (typeof THEORY !== 'undefined') CALCS.forEach(c => { const t = THEORY[c.id]; if (t) IDX.push({ kind: 'Theory', title: c.name + ' — theory', text: [t.why, ...(t.theory || []), ...(t.assume || []), ...(t.tips || [])].join(' '), cite: [], go: () => openHelp(c.id) }); });
   CALCS.forEach(c => IDX.push({ kind: 'Calculator', title: c.name, text: [c.blurb, c.area, c.group, ...(c.formula || []), ...(c.where || []), ...(c.inputs.map(i => i.label))].join(' '), cite: [], go: () => { pickCalc(c.id); showTab('calc'); } }));
   TS.forEach(t => {
-    IDX.push({ kind: 'Troubleshooting', title: t.name, text: [t.summary, t.qld].join(' '), cite: [], go: () => { curTs = t.id; store.set('ts', t.id); renderChips(); renderTs(); showTab('trouble'); } });
-    t.rows.forEach((r, i) => IDX.push({ kind: 'Troubleshooting · ' + t.name, title: r.see, text: [...(r.causes || []), ...(r.checks || []), ...(r.actions || []), r.note, r.qld].join(' · '), cite: [], go: () => { curTs = t.id; store.set('ts', t.id); renderChips(); renderTs(); showTab('trouble'); setTimeout(() => document.getElementById(`ts-${t.id}-${i}`)?.scrollIntoView({ block: 'center' }), 30); } }));
+    IDX.push({ kind: 'Troubleshooting', title: t.name, text: [t.summary, t.aside].join(' '), cite: [], go: () => { curTs = t.id; store.set('ts', t.id); renderChips(); renderTs(); showTab('trouble'); } });
+    t.rows.forEach((r, i) => IDX.push({ kind: 'Troubleshooting · ' + t.name, title: r.see, text: [...(r.causes || []), ...(r.checks || []), ...(r.actions || []), r.note, r.aside].join(' · '), cite: [], go: () => { curTs = t.id; store.set('ts', t.id); renderChips(); renderTs(); showTab('trouble'); setTimeout(() => document.getElementById(`ts-${t.id}-${i}`)?.scrollIntoView({ block: 'center' }), 30); } }));
   });
-  CARDS.forEach(c => c.rows.forEach((r, i) => IDX.push({ kind: 'Range · ' + c.name, title: r.p + ': ' + r.v, text: [r.note, r.qld].join(' '), cite: [], go: () => { showTab('ranges'); pickCard(c.id, i); } })));
+  CARDS.forEach(c => c.rows.forEach((r, i) => IDX.push({ kind: 'Range · ' + c.name, title: r.p + ': ' + r.v, text: [r.note, r.aside].join(' '), cite: [], go: () => { showTab('ranges'); pickCard(c.id, i); } })));
   GLOSSARY.forEach(g => IDX.push({ kind: 'Glossary', title: g[0] + ' — ' + g[1], text: g[2], cite: [], go: () => { showTab('gloss'); renderGloss(g[0]); } }));
   (typeof EXTRA !== 'undefined' ? EXTRA : []).forEach(x => IDX.push({ kind: 'Note · ' + x.topic, title: x.title, text: x.text, cite: [].concat(x.cite), go: null }));
 }
@@ -6132,8 +6163,10 @@ function pickRole(id) {
 document.addEventListener('click', e => { if (e.target.closest('[data-welcome]')) { e.preventDefault(); showWelcome(); } });
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('#welcome') && !$('#welcome').hidden) closeWelcome(); });
 // ---------- Pro (one-off purchase from the WWTP Plus shop, unlocked with a code) ----------
-// Buyers receive an unlock code. Codes are checked on the device against a list of hashed codes,
-// so the app stays fully offline. To retire a leaked code, remove its hash from PRO_CODE_HASHES and publish an update.
+// Each order gets its own code, WP-H<order number>-XXXXX-XXXXX, shown in the shop's order confirmation email.
+// The app works the same code out from the order number (HMAC-SHA256), so it stays fully offline.
+// To block a leaked order code, add its order number to REVOKED_ORDERS and publish an update.
+// Older WWTP-XXXX-XXXX-XXXX codes are still accepted (checked against PRO_CODE_HASHES).
 const APP_URL = 'https://app.wwtpplus.com/';                 // where the app is hosted
 const SHOP_URL = 'https://wwtpplus.com';                     // your shop
 const PRO_URL = 'https://wwtpplus.com/products/operator-handbook-pro'; // Pro product page in the shop
@@ -6141,10 +6174,44 @@ const SUPPORT_EMAIL = 'hello@wwtpplus.com';                  // contact email
 const PRO_PRICE = 'A$29';                                    // shown on the Go Pro screen
 const PRO_SALT = 'wwtpplus-poh-v1|';
 const PRO_CODE_HASHES = new Set(["a29b7927cbb87188", "8e21d50f7e99c00c", "b5c7968dce2775b5", "1e4dc51a4bc8ed15", "1c238d4d28c860bc", "6d6962b1edc5f6fb", "1aa06687028cf62c", "99a29bebd16ddd7a", "29b6456099691232", "72f5278f225b70af", "8b649c3f77b30d81", "66af4af4ff509015", "9afddd3643da2b06", "edaa46c43e607ce6", "153d972f862f0a1e", "dce520e8506b8f27", "a40b20d17e6062ac", "9aad75566c87054a", "e128749588d1cd68", "a5f38527a5399914", "a59293708e0673dc", "b1b24561c4c0426d", "bd201d230874f1cb", "dec73443cd857b6b", "a58ea775f9cd4d16", "f636bb2d9dca89d7", "fdc834690fde32cc", "6fafa31521d0181b", "add9650d3e4db0f7", "6c215bbf69eeb9f7", "70ae34622267d119", "0853e34003da751a", "88ddaf29f0333176", "fe2800d38dd79cd3", "44756ed1908fa6e8", "f7a35ca3d4934b35", "ba2d66e7343aa07b", "d2339fd7ac256fe1", "c9b63a9f0bad6093", "fac8e5a06b3b877a", "8492f8307d2672d0", "0821a98ed08e1258", "77d16c88e1f44265", "9d0a74d210c54d7d", "7aa3bdc3d9237593", "d0ebf0b99aa3d023", "c3872134c159a8f9", "f21d4cfc3470db19", "ca240364967141fd", "ccdbeaded5e8cec7", "a81157b37d88327d", "d8ecf78dce453beb", "b7ca8d4e1d5789f2", "c4d663e871688344", "dcd20d454347345b", "fa0140adc7cfb6f2", "26d295e5a819ac24", "b4e810c6540ee581", "5be6530a6e8077b3", "f95ed32f065ec766", "25fb8a54213c67e4", "0b4f304945bd8f56", "2f9dbb42638a7e53", "2ec729174056958b", "356c47d79d062ac0", "bda77ea90f4e74f9", "a557d9d895e21c38", "0319fcc67e211e75", "8de45933ea20ecb0", "87b0a8deb76b63c3", "7080443a1a7aea73", "fd124336c666f09a", "379d4eded5c202aa", "bb8847887b7d9ed5", "8669b019308063d8", "b48dd3f30a8bf973", "3dabfd86df8158dd", "b51a26752efe8b1e", "fcbf8911c2fb5fbc", "e91aec04930c9eca", "248a07cdc5c689d4", "13a8429865f4df41", "48b0d78b99507a7d", "0fcf23898fa16762", "a7b6c9b2f8c91796", "2276936996d28ded", "f431fdf42689c06b", "c64b53953a46cebb", "6e24618acfacdad2", "db226e0fcf922bab", "e497f33ace2cf497", "515aee1c32ad3a58", "5d190adc3809822a", "6438d564aa7a60e8", "93350321355260a1", "bbfa6d291ab05f16", "770bfc5453ba0d0d", "93bad2990f18e2d9", "43508118fbfcabe0", "685fff0cdaeb0c4b", "023b5de1b701f8cd", "2aeefe69f7d476fc", "47d9a7a855cba612", "19fa4dc45019d94d", "c5b64047ce252b2c", "d3bc7305e6be3e6a", "ffd150fab0b10afe", "821b4243884a88aa", "bf59ef33992194e2", "c3f06b6537b34bf3", "0d38fa593e44652b", "9c54e82590b60297", "75bb4c389e89b8e0", "73308b2abedbcf97", "907c9df0e5889bd6", "d06c57da13ca883b", "4f442c0dbfe2fa41", "f252d063dd216f31", "f409ee7343508767", "ce1e80378f133983", "ff9a672475f61029", "5566be4a5e3222a5", "67f004745b3f429e", "58d6a594dd55714e", "9b00007953aa7ef9", "a615c5b5ee8a3561", "fe9c9b9b9fe9dc1a", "3b65ae310ac04b0d", "0a3208b471147815", "5dec2a20ba8bc43a", "2f3744672fdc2869", "6f006a519d56ef8b", "548d3295d7157513", "63cb3393a0a35326", "026091ae4a6e3a92", "5f1b1f21419d0fba", "5c0a50e408a1a0c4", "4f6e131af663e476", "311dc4af2ee45312", "378fef603ca4425b", "1ae7b106b71ae4ea", "4fd6669de18b6f4e", "44672f0addefdcb5", "2404472353eef0a0", "c9d26712d8800386", "2606f836432cfb9d", "e4ef35dfc119ab79", "d4add30f9146f2d0", "ae210de137575e3e", "e3a16c339abc2cb5", "ef3bcb5c20810eeb", "889a307f169b1986", "077c1dce014fe671", "f3ceade53171c6f4", "7ecf85335393a48d", "02069caf211acc63", "568a0b27acb4c746", "53bc3ac2fb453e63", "c2a02161d7a26b62", "dd330962e87cffa9", "ba18e43ec47b253f", "92ec7b79460a0f6e", "a26a3cc280213760", "0708c6ab13233f5f", "c49704c0aa01370e", "8aa0cdfe4eef7e06", "b1e2500ec91d8019", "18d6ebbb1d85879e", "9b495fa0750685e3", "d24e5d3258b9b548", "651d86f7aab0ea74", "5f8287dd7da76116", "467e0e75aa4a0bd0", "e812609c32a79423", "f83aae1e22beceb5", "e12d1b3013b00b41", "1e7891031ebf5530", "94575c84096ee731", "a496d6184461549a", "949338b5c77e42c6", "663e7282b49e818d", "846a5ffa71ce422c", "a092eb5d185a2797", "c64edd7f9cca1525", "dca5c845385a40fc", "b2ed3fe172b5c230", "e553964a99618977", "0a0c185f03c7537c", "e492cef4b1233ec4", "1dcef724c75520fb", "1c1cd471d5245bde", "a73bb571995c12ac", "69a3b85af06f68e1", "1488bf19ac1b4025", "db2a1d5ffdb8c67c", "22cb08485413c976", "ad39e6051d78892b", "9a6e6375795752ee", "5c1bc9f727dc944b", "d8ac7ac15708bbb9", "76d78aa50d73c8b4", "d7c0707982bfcf1e", "51ada18bdb4db491", "63bb84422ff691c1", "4535c9233cd19918", "7743a256ab8d034e", "37b88bc616352cd8", "d11dd351fd66ba09", "3ba5696113d03dbe", "337b24f509158155", "5c357c98097b7825", "e9f115d4c21cb7cd", "89bc0110317273a3", "4cc370b045562244", "bb017333bf31947b", "f6ef3f029049c8f5", "9ba79db2f2d22d4e", "95f9bffa43da7827", "80ab85b79406a49d", "4ccc168236547ce3", "187f49cc216767b4", "ba47fff96a4c2ab2", "15af0e087eda8f24", "a49eb13a3ce0af85", "151d7c2037547bd4", "3ae3811adcb10f1a", "d7786ca6b0705e95", "ca3c33756615603e", "1a1ccdda1485b60d", "fbbdbc7b38bc3968", "b16f5ba1aa36fb6a", "b3819021cf55bfd5", "ad9bcf8425d57997", "251016bc7dc8b31a", "6fc7872d470a1844", "0aa1ceda75068c05", "6fedb9f5cf8fa2c2", "a89c9c24bd301b24", "1caf688d2ce50e6b", "7e42dd4848370cc2", "e6adee492b2a3dcc", "558ff0709340b60e", "d77739d22ae4cfcb", "f599916f48294fb4", "ccd4f1089b1a783e", "c7d5c287de12dab7", "974b12bf8ab7c646", "facddd8f1d9e23d0", "9918e9c0ec0f69b9", "25368771ec264c17", "d49a45f75218717f", "22ae76eefa1cf02f", "47fd65f85014857f", "5c72c172f1af9d12", "24fad73e15beefa9", "2673bd1fab3aebd7", "feacf99e77d7fdbc", "b0514922dc8e88e4", "912232bf8be3c2d8", "421d182e5f538553", "19664dbdd971a550", "bc84fe525a71ade7", "9e6dade0ab85956f", "a53e9ef879745012", "4d322e54e2032198", "9960feb483b6c0e7", "8594fb92f62adda8", "3804d8f9914eea99", "38989a4abdfe30bf", "a462cb623c81cab3", "197bab488864b8f8", "2bccb1255423f802", "0577975aaf57e0fc", "57d39cea2393ff48", "e612cb2f9ff150f7", "a804da20f87dda0d", "44bc85bffc953ee9", "7cf10a017ccbc231", "a9ea5cf7a06fd774", "1c1d533f3f3fdeaa", "ae43060ae3bcf842", "a36a9716bdf5e57e", "3f36a8fb65e89484", "5d7141a82af36eaf", "850739d875fb5039", "e3b54b51e8d0bc68", "eabd795dc4c784e0", "a94fee6f45211602", "e2414bcbcdfd7488", "d06d47e6b9602be3", "6dc57319cf5c1869", "41846c22967176c0", "81bbb53b59725501", "7cec4ecb93a36b91", "1bb312fc832b63fe", "5dabc63ec923b944", "e4143625197d71b3", "d3190824691b6b59", "14d846ff4dd4ba58", "076180d1371042c6"]);
+const POH_SECRET = 'LCvKDNsz2FMoHDP4Gtgk1s-I';
+const REVOKED_ORDERS = new Set([]);            // order numbers whose codes were shared publicly
+const POH = (() => {
+  // SHA-256 / HMAC (sync, no crypto API needed, works from a file)
+  function sha256(bytes) {
+    const K = [0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
+    const H = [0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];
+    const l = bytes.length, n = ((l + 9 + 63) >> 6) << 6, m = new Uint8Array(n); m.set(bytes); m[l] = 0x80;
+    const bits = l * 8; for (let i = 0; i < 4; i++) m[n - 1 - i] = (bits >>> (8 * i)) & 255; m[n - 5] = Math.floor(bits / 4294967296) & 255;
+    const w = new Array(64), r = (x, c) => (x >>> c) | (x << (32 - c));
+    for (let o = 0; o < n; o += 64) {
+      for (let i = 0; i < 16; i++) w[i] = (m[o + 4 * i] << 24) | (m[o + 4 * i + 1] << 16) | (m[o + 4 * i + 2] << 8) | m[o + 4 * i + 3];
+      for (let i = 16; i < 64; i++) { const a = w[i - 15], b = w[i - 2]; w[i] = (w[i - 16] + (r(a, 7) ^ r(a, 18) ^ (a >>> 3)) + w[i - 7] + (r(b, 17) ^ r(b, 19) ^ (b >>> 10))) | 0; }
+      let [a, b, c, d, e, f, g, h] = H;
+      for (let i = 0; i < 64; i++) {
+        const t1 = (h + (r(e, 6) ^ r(e, 11) ^ r(e, 25)) + ((e & f) ^ (~e & g)) + K[i] + w[i]) | 0, t2 = ((r(a, 2) ^ r(a, 13) ^ r(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) | 0;
+        h = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;
+      }
+      H[0] = (H[0] + a) | 0; H[1] = (H[1] + b) | 0; H[2] = (H[2] + c) | 0; H[3] = (H[3] + d) | 0; H[4] = (H[4] + e) | 0; H[5] = (H[5] + f) | 0; H[6] = (H[6] + g) | 0; H[7] = (H[7] + h) | 0;
+    }
+    const out = new Uint8Array(32); H.forEach((v, i) => { out[4 * i] = v >>> 24; out[4 * i + 1] = (v >>> 16) & 255; out[4 * i + 2] = (v >>> 8) & 255; out[4 * i + 3] = v & 255; }); return out;
+  }
+  const utf8 = s => new TextEncoder().encode(s);
+  function hmacHex(key, msg) {
+    let k = utf8(key); if (k.length > 64) k = sha256(k);
+    const op = new Uint8Array(96), mb = utf8(msg);
+    const ipad = new Uint8Array(64 + mb.length); for (let i = 0; i < 64; i++) { ipad[i] = (k[i] || 0) ^ 0x36; op[i] = (k[i] || 0) ^ 0x5c; }
+    ipad.set(mb, 64); op.set(sha256(ipad), 64);
+    return Array.from(sha256(op)).map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  return { hmacHex };
+})();
+function orderCode(order) { const h = POH.hmacHex(POH_SECRET, 'POH|' + order).toUpperCase(); return `WP-H${order}-${h.slice(0, 5)}-${h.slice(5, 10)}`; }
 const FREE = { drillPerDay: 5, logMax: 5, miniExamPerDay: 1, miniExamLen: 10 };
 let PRO = false;
 let PRO_SAVED = ''; try { PRO_SAVED = localStorage.getItem('pro-code') || ''; localStorage.removeItem('pro'); } catch (e) {} // Pro is only switched on by a valid saved code
-const PREVIEW_HOST = location.protocol === 'file:' || /localhost|127\.0\.0\.1/.test(location.hostname);
+const PREVIEW_HOST = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
 const today = () => { const d = new Date(); return new Date(d.getTime() - d.getTimezoneOffset() * 6e4).toISOString().slice(0, 10); }; // local date
 function setPro(v) {
   PRO = !!v; if (!PRO) { try { localStorage.removeItem('pro-code'); } catch (e) {} }
@@ -6159,13 +6226,15 @@ function bump(k) { const n = used(k) + 1; try { localStorage.setItem('day-' + k,
 function normCode(c) { return String(c || '').toUpperCase().replace(/[^0-9A-Z]/g, ''); }
 async function checkCode(raw) {
   const c = normCode(raw);
+  const om = c.match(/^WPH(\d+)([0-9A-Z]{10})$/);
+  if (om) { const n = +om[1]; if (REVOKED_ORDERS.has(n)) return 'revoked'; return normCode(orderCode(n)) === c ? 'ok' : 'bad'; }
   if (!/^WWTP[0-9A-Z]{12}$/.test(c)) return 'format';
   if (!(window.crypto && crypto.subtle)) return 'nocrypto';
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(PRO_SALT + c));
   const hex = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 16);
   return PRO_CODE_HASHES.has(hex) ? 'ok' : 'bad';
 }
-const CODE_MSG = { ok: 'Thank you! Pro is unlocked.', format: 'Codes look like WWTP-XXXX-XXXX-XXXX. Please check and try again.', bad: 'That code was not recognised. Check it against your order email, or contact ' + SUPPORT_EMAIL + '.', nocrypto: 'Please open the app from ' + APP_URL + ' to enter your code.' };
+const CODE_MSG = { ok: 'Thank you! Pro is unlocked.', format: 'Codes look like WP-H1234-XXXXX-XXXXX (from your order email). Please check and try again.', revoked: 'This code has been shared publicly and no longer works. Please contact ' + SUPPORT_EMAIL + ' with your order number.', bad: 'That code was not recognised. Check it against your order email, or contact ' + SUPPORT_EMAIL + '.', nocrypto: 'Please open the app from ' + APP_URL + ' to enter your code.' };
 async function redeemCode(raw) {
   const r = await checkCode(raw);
   if (r === 'ok') { setPro(true); try { localStorage.setItem('pro-code', normCode(raw)); } catch (e) {} }
@@ -6195,9 +6264,9 @@ function showPaywall(reason) {
     </div>
     <form class="pw-code" id="pw-form" autocomplete="off">
       <label for="pw-code-in"><b>Already bought Pro?</b> Enter your unlock code</label>
-      <div class="pw-code-row"><input id="pw-code-in" type="text" inputmode="text" autocapitalize="characters" spellcheck="false" placeholder="WWTP-XXXX-XXXX-XXXX" maxlength="24"><button class="btn" type="submit">Unlock</button></div>
+      <div class="pw-code-row"><input id="pw-code-in" type="text" inputmode="text" autocapitalize="characters" spellcheck="false" placeholder="WP-H1001-XXXXX-XXXXX" maxlength="30"><button class="btn" type="submit">Unlock</button></div>
     </form>
-    <p class="note" id="pw-msg" aria-live="polite">Secure checkout in the WWTP Plus shop. Your code arrives by email straight after purchase. Keep it to unlock Pro on a new phone.</p>
+    <p class="note" id="pw-msg" aria-live="polite">Secure checkout in the WWTP Plus shop. Your personal code is in your order confirmation email, with a one-tap unlock link. Keep it to unlock Pro on a new phone.</p>
   </div>`;
   m.hidden = false; document.body.classList.add('modal-open');
   const fm = $('#pw-form'); if (fm) fm.onsubmit = async ev => { ev.preventDefault(); const r = await redeemCode($('#pw-code-in').value); $('#pw-msg').textContent = CODE_MSG[r]; if (r === 'ok') setTimeout(closePaywall, 1200); };
@@ -6559,6 +6628,8 @@ function renderSetup(p) {
     p.name = $('#pname').value.trim() || p.name;
     document.querySelectorAll('[data-dim]').forEach(i => { if (!chg(i)) return; const def = PLANT_DIMS.find(x => x[0] === i.dataset.dim); p.dims[i.dataset.dim] = pRead(i.value, def[2]); });
     p.rounds.forEach((r, k) => { r.on = $(`[data-on="${k}"]`).checked; const lo = $(`[data-lo="${k}"]`), hi = $(`[data-hi="${k}"]`); if (chg(lo)) r.lo = pRead(lo.value, r.unit); if (chg(hi)) r.hi = pRead(hi.value, r.unit); });
+    // an MBR plant (membranes, no clarifier): MBR MLSS limits and the TMP round, once
+    if (p.dims.membArea > 0 && !(p.dims.clarArea > 0) && !p.mbrDefaults) { const m = p.rounds.find(r => r.key === 'mlss'); if (m && m.lo === 2500 && m.hi === 5000) { m.lo = 6000; m.hi = 10000; } const t = p.rounds.find(r => r.key === 'tmp'); if (t) t.on = true; p.mbrDefaults = true; }
   };
   $('#psetsave').onclick = () => {
     readForm(); savePlants(); renderSetup(p); $('#psetmsg').textContent = 'Saved. Calculators now use your plant data.'; if (typeof renderPlantOverview === 'function') renderPlantOverview(p);
@@ -6711,7 +6782,7 @@ $('#shareapp').onclick = async () => { $('#sharemsg').textContent = await shareA
 const UL = (location.hash.match(/unlock=([0-9A-Za-z-]+)/) || location.search.match(/unlock=([0-9A-Za-z-]+)/) || [])[1];
 if (UL) { history.replaceState(null, '', location.pathname); redeemCode(UL).then(r => { showPaywall(); const mm = $('#pw-msg'); if (mm) mm.textContent = CODE_MSG[r]; const ci = $('#pw-code-in'); if (ci) ci.value = UL; if (r === 'ok') setTimeout(closePaywall, 1800); }); }
 const h = (location.hash || '').slice(1); showTab(TABS.includes(h) ? h : (store.get('tab') || 'calc'));
-if (!store.get('welcomed') && !h) showWelcome();
+if (!store.get('welcomed') && !h && !UL) showWelcome();
 
 $('#supmail').textContent = SUPPORT_EMAIL;
 $('#openlog2').onclick = e => { e.preventDefault(); showTab('log'); window.scrollTo(0, 0); };
